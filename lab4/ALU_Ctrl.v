@@ -1,0 +1,45 @@
+module ALU_Ctrl( funct_i, ALUOp_i, ALU_operation_o, leftRight_o, FURslt_o );
+
+//I/O ports 
+input      [6-1:0] funct_i;
+input      [3-1:0] ALUOp_i;
+
+output     [4-1:0] ALU_operation_o;  
+output     [2-1:0] FURslt_o;
+output	   	leftRight_o;  
+   
+//Internal Signals
+wire		[4-1:0] ALU_operation_o;
+wire		[2-1:0] FURslt_o;
+wire		leftRight_o;  
+
+//Main function
+/*your code here*/
+reg [3:0] op4;
+reg [1:0] fur;
+reg	lR;
+always@(funct_i, ALUOp_i) begin
+	case(ALUOp_i)
+		3'b010: case(funct_i)
+			6'b010010: begin op4 <= 2; fur <= 0; lR <= 0; end	//add
+			6'b010000: begin op4 <= 6; fur <= 0; lR <= 0; end	//sub
+			6'b010100: begin op4 <= 0; fur <= 0; lR <= 0; end	//and
+			6'b010110: begin op4 <= 1; fur <= 0; lR <= 0; end	//or
+			6'b010101: begin op4 <= 12; fur <= 0; lR <= 0; end	//nor
+			6'b100000: begin op4 <= 7; fur <= 0; lR <= 0; end	//slt
+			6'b000000: begin op4 <= 1; fur <= 1; lR <= 1; end		//left
+			6'b000010: begin op4 <= 0; fur <= 1; lR <= 0; end		//right
+			//default: begin op4 <= 2; fur <= 0; end
+		endcase
+		3'b100: begin op4 <= 2; fur <= 0; lR <= 0; end		//addi
+		3'b000: begin op4 <= 2; fur <= 0; lR <= 0; end		//lw sw
+		3'b001: begin op4 <= 6; fur <= 0; lR <= 0; end		//beq
+		3'b110: begin op4 <= 6; fur <= 0; lR <= 0; end		//bne
+		
+	endcase
+end
+assign ALU_operation_o = op4;
+assign FURslt_o = fur;
+assign leftRight_o = lR;
+
+endmodule  
