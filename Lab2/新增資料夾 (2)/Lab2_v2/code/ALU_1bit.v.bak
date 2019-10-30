@@ -1,0 +1,49 @@
+module ALU_1bit( result, carryOut, a, b, invertA, invertB, operation, carryIn, less );  
+
+  output wire result;
+  output wire carryOut;
+  
+  input wire a;
+  input wire b;
+  input wire invertA;
+  input wire invertB;
+  input wire[1:0] operation;
+  input wire carryIn;
+  input wire less;
+  reg res;
+  reg cout;
+  reg cin;
+  /*your code here*/ 
+  initial
+    case(operation)
+	
+	2'b10:if(invertA == 1'b0 && invertB == 1'b0) begin	//add
+				
+			res = a^b^carryIn;
+			cout = (a&&b)|(b&&carryIn)|(carryIn&&a);
+		end
+		else if(invertA == 1'b0 && invertB == 1'b1) begin	//sub
+			//assign carryIn = 1'b1;
+			cin = 1'b1;
+			res = a^!b^cin;
+			//cout = (a&!b)|(!b&cin)|(cin&a);
+			cout = 0;
+		end
+	2'b01:if((invertA & invertB) == 1'b0)	begin	//and
+			res = a&b;	end
+		else if((invertA & invertB) == 1'b1)	begin	//nor
+			res = !(a|b);	end
+	2'b00:if((invertA & invertB) == 1'b0)	begin	//or
+			res = a|b;	end
+		else if((invertA & invertB) == 1'b1)	begin	//nand
+			res = !(a&b);	end
+	2'b11:if(a == 1'b0 && b == 1'b1)	begin	//sltt
+			res = 1'b1;	end
+		else 	begin
+			res = 1'b0;	end
+			
+  endcase
+  assign result = res;
+  assign carryOut = cout;
+
+endmodule
