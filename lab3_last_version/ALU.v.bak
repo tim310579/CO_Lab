@@ -1,0 +1,39 @@
+module ALU( aluSrc1, aluSrc2, ALU_operation_i, result, zero, overflow );
+
+//I/O ports 
+input	[32-1:0] aluSrc1;
+input	[32-1:0] aluSrc2;
+input	 [4-1:0] ALU_operation_i;
+
+output  [32-1:0] result;
+output			 zero;
+output			 overflow;
+
+//Internal Signals
+
+wire			 zero;
+wire			 overflow;
+wire	[32-1:0] result;
+
+//Main function
+/*your code here*/
+reg [31:0] res;
+reg [32:0] over;
+
+always @(ALU_operation_i, aluSrc1, aluSrc2) begin
+	case (ALU_operation_i)
+		4'b0000: res = aluSrc1 & aluSrc2;
+		4'b0001: res = aluSrc1 | aluSrc2;
+	  	4'b0010: res = $signed(aluSrc1) + $signed(aluSrc2);
+		4'b0110: res = $signed(aluSrc1) - $signed(aluSrc2);
+		4'b0111: res = $signed(aluSrc1) < $signed(aluSrc2) ? 1 : 0;
+		//(aluSrc1[31]&!aluSrc2[31])&((aluSrc1[31]&!aluSrc2[31])|((aluSrc1 < aluSrc2) ? 1:0));
+		4'b1100: res = ~(aluSrc1 | aluSrc2);	//nor
+		default: res = 0;
+	endcase
+	over =  $signed(aluSrc1 )+ $signed(aluSrc2);
+end
+assign result = res;
+assign overflow = over[32];
+assign zero = (result == 0)?1:0;
+endmodule

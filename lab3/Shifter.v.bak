@@ -1,0 +1,35 @@
+module Shifter( result, leftRight, shamt, sftSrc );
+
+//I/O ports 
+output	[32-1:0] result;
+
+input			leftRight;
+input	[5-1:0] shamt;
+input	[32-1:0] sftSrc ;
+
+//Internal Signals
+wire	[32-1:0] result;
+  
+//Main function
+/*your code here*/
+
+
+reg [31:0] res;
+
+always @(leftRight, shamt, sftSrc) begin
+	res <= ((sftSrc >> shamt)&&!leftRight) || ((sftSrc << shamt)&&leftRight);
+end
+/*genvar i;
+	assign result[0] = (!leftRight)&&(sftSrc[shamt]);
+	for(i = 1; i < 7; i = i + 1) begin
+		assign result[i] = (!leftRight)&&(sftSrc[i+shamt]);
+	end
+  	/*for(i = shamt; i < 32 - shamt; i = i + 1) begin
+		assign result[i] =((!leftRight)&&(sftSrc[i+shamt])) || (leftRight&&sftSrc[i-shamt]);
+  	end
+	for(i = 32-shamt; i < 31; i = i + 1) begin
+		assign result[31] = leftRight&&sftSrc[31-shamt];
+	end*/
+  	//assign result[31] = leftRight&&sftSrc[31-shamt];
+//end
+endmodule
